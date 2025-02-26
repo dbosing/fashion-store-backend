@@ -1,21 +1,27 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
+require("dotenv").config();
 
-app.use(express.json());
-app.use(cors());
+const productRoutes = require("./routes/products");
+const userRoutes = require("./routes/users");
+const orderRoutes = require("./routes/orders");
+const bookingRoutes = require("./routes/bookings");
+const serviceRoutes = require("./routes/services");
+const popupRoutes = require("./routes/popups");
 
-app.use("/api/products", require("./routes/products"));
-app.use("/api/users", require("./routes/users"));
-app.use("/api/orders", require("./routes/orders"));
-app.use("/api/bookings", require("./routes/bookings"));
-app.use("/api/services", require("./routes/services"));
-app.use("/api/popups", require("./routes/popups"));
-
+const app = express();
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+app.use(cors());
+app.use(express.json());
+
+// Register Routes
+app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/popups", popupRoutes);
 
 app.get("/", (req, res) => {
     res.send("API is running...");
