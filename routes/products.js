@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const productsController = require("../controllers/productsController");
+const db = require("../config/db");
 
-// Define routes
-router.get("/", productsController.getAllProducts);
-router.get("/:id", productsController.getProductById);
-router.post("/", productsController.createProduct);
-router.put("/:id", productsController.updateProduct);
-router.delete("/:id", productsController.deleteProduct);
+router.get("/", async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT * FROM products");
+    res.json(rows);
+  } catch (err) {
+    console.error("Database query failed:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
