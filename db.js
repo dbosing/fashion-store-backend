@@ -1,9 +1,5 @@
-const mysql = require('mysql2');
+const mysql = require("mysql2");
 
-// Load environment variables from a .env file
-require('dotenv').config();
-
-// Create a MySQL connection pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -14,7 +10,13 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// Export promise-based pool for async/await support
-const promisePool = pool.promise();
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error("Database connection failed:", err);
+    return;
+  }
+  console.log("Connected to MySQL database!");
+  connection.release();
+});
 
-module.exports = promisePool;
+module.exports = pool;
